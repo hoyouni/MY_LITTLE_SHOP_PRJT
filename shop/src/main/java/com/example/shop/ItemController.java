@@ -1,8 +1,11 @@
 package com.example.shop;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
 
 /**
  * 상품 관련 Controller
@@ -61,13 +64,45 @@ import org.springframework.web.bind.annotation.GetMapping;
  *
  *       >> 여기까지가 호스팅 받고 데이터베이스 만들어서 설정 후 연결 테스트까지 한 것이고 이제 진짜 개발 고고
  *
+ *         13) 상품 / 공지사항 테이블 (엔티티) 만든 후 데이터 임의로 넣고 lombok 라이브러리 설치 (build.gradle 내 dependencies 추가)
+ *             >> lombok 이 뭔데 ? 왜 설치하냐 ?
+ *                >> lombok 은 필요한 코드를 자동으로 생성해주어서 코드 가독성을 높여주고 양을 줄여주는 편리한 라이브러리로 설치 권장
+ *                   build.gradle 설정이 완료되면 추가로 lombok 플러그인 설치 및 Setting 메뉴 내 annotation processor 설정 필요
+ *
+ *         14) 데이터 출력 해보자
+ *             >> 데이터 출력을 위해서는 3가지 단계가 있음
+ *                1단계 : repository 라는 인터페이스를 만들어주고
+ *                2단계 : DB입출력을 원하는 클래스에 만들어놓은 repository 인터페이스를 등록해주고
+ *                3단계 : DB입출력 문법을 사용하면 됨. 아래 코드 작성 해놓은거 있으니 참고 (ProductRepository 인터페이스도 참고)
  */
 @Controller
+@RequiredArgsConstructor
 public class ItemController {
+
+    // lombok에서 제공하는 @RequiredArgsConstructor 어노테이션에 의해 자동으로 DI 주입
+    private final ProductRepository prdRepo;
+
+    /* 만약 lombok 을 안 쓴다고 하면?
+     @AutoWired
+     public ItemController(ProductRepository prdRepo) {
+        this.prdRepo = prdRepo;
+     }
+     이런 식으로 생성자에 인스턴스 할당해도 됨
+    */
 
     @GetMapping("/productList")
     String productList(Model model) {
-        model.addAttribute("prodCd","A10000");
+
+        /**
+         * 1.템플릿 엔진(Thymeleaf) 을 통한 데이터 응답
+         * model.addAttribute("prodCd","A10000");
+         */
+
+        // 2. 데이터베이스 연결(JPA) 을 통한 데이터 응답
+        // 테이블 내 모든 데이터 리스트 출력 시 findAll 함수 사용
+        List<Product> list = prdRepo.findAll();
+        // 출력 해보고 싶을 때는 System.out.println(list.get(0).prodNm); 입력해서 확인해보기 (자바 자료구조 알면 이거 말고도 더 있긴한데 쓰기 귀찮음)
+
         return "productList.html";
     }
 
