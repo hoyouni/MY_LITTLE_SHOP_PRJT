@@ -1,6 +1,8 @@
 package com.example.shop.product;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
@@ -16,18 +18,20 @@ import lombok.ToString;
  */
 @Entity
 @ToString
+@Getter
+@Setter
 public class Product {
     /**
      * @Id 어노테이션을 사용하여 각 인스턴스 (row) 별로 구분자를 만들어줘야함, 뭐 pk 와 같은 기본키라고 보면 될 듯.
      * @GeneratedValue(strategy = GenerationType.IDENTITY) 를 사용하게 되면 SQL 에서 자동 시퀀스 마냥 알아서 번호를 1씩 올려서 채번해줌
      */
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long prodCd;    // 상품코드
+    private Long prodCd;    // 상품코드
 
-    public String prodNm;  // 상품명
+    private String prodNm;  // 상품명
 
     // 컬럼용 변수에는 int 말고 Integer 를 사용하도록 권장함
-    public Integer price;  // 상품금액
+    private Integer price;  // 상품금액
 
 }
 
