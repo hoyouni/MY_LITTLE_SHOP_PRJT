@@ -1,9 +1,10 @@
-package com.example.shop;
+package com.example.shop.product;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -77,9 +78,10 @@ import java.util.List;
  */
 @Controller
 @RequiredArgsConstructor
-public class ItemController {
+@RequestMapping("/product")
+public class ProductController {
 
-    // lombok에서 제공하는 @RequiredArgsConstructor 어노테이션에 의해 자동으로 DI 주입
+    // lombok에서 제공하는 @RequiredArgsConstructor 어노테이션에 의해 자동으로 ProductRepository DI 주입
     private final ProductRepository prdRepo;
 
     /* 만약 lombok 을 안 쓴다고 하면?
@@ -92,18 +94,24 @@ public class ItemController {
 
     @GetMapping("/productList")
     String productList(Model model) {
-
         /**
-         * 1.템플릿 엔진(Thymeleaf) 을 통한 데이터 응답
-         * model.addAttribute("prodCd","A10000");
+         * 템플릿 엔진(Thymeleaf) + 데이터베이스 연동을 통한 데이터 응답
+         * 테이블 내 모든 데이터 리스트 출력 시 findAll 함수 사용
+         * findAll 함수로 호출하여 list 자료구조에 담고 해당 리스트를 모델의 속성에 key-value 로 담아서
+         * html 페이지로 응답 해주면 됨
          */
 
-        // 2. 데이터베이스 연결(JPA) 을 통한 데이터 응답
-        // 테이블 내 모든 데이터 리스트 출력 시 findAll 함수 사용
         List<Product> list = prdRepo.findAll();
-        // 출력 해보고 싶을 때는 System.out.println(list.get(0).prodNm); 입력해서 확인해보기 (자바 자료구조 알면 이거 말고도 더 있긴한데 쓰기 귀찮음)
+        model.addAttribute("products", list);
 
-        return "productList.html";
+        /*
+         *  데이터 출력 해보고 싶을 때는 System.out.println(list.get(0).prodNm); 입력해서 확인해보기
+         *  (자바 자료구조 알면 이거 말고도 더 있긴한데 쓰기 귀찮음)
+         *  참고로 특정 엔티티의 컬럼들 보고 싶으면 이렇게 출력해봐도 됨
+         *  System.out.println(new Product().toString());
+        */
+
+        return "product/productList.html";
     }
 
 }

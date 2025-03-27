@@ -1,6 +1,7 @@
-package com.example.shop;
+package com.example.shop.product;
 
 import jakarta.persistence.*;
+import lombok.ToString;
 
 /**
  * Product 클래스이자 엔티티이자 테이블 생성
@@ -11,8 +12,10 @@ import jakarta.persistence.*;
  *     다만 코드를 통해 테이블 속성 변경하는 경우에는 바로 반영이 안 될 수도 있어서
  *     drop table 후에 다시 코드를 빌드 하거나
  *     아니면 처음부터 dbeaver 에서 속성 변경 해주는게 빠를 수도 있음.
+ *     lombok 의 @ToString 어노테이션을 사용하면 굳이 직접 오버라이딩 안하고 toString 함수를 생성할 수 있도록 해줌
  */
 @Entity
+@ToString
 public class Product {
     /**
      * @Id 어노테이션을 사용하여 각 인스턴스 (row) 별로 구분자를 만들어줘야함, 뭐 pk 와 같은 기본키라고 보면 될 듯.
@@ -25,6 +28,7 @@ public class Product {
 
     // 컬럼용 변수에는 int 말고 Integer 를 사용하도록 권장함
     public Integer price;  // 상품금액
+
 }
 
 
