@@ -11,15 +11,16 @@
 </head>
 <body>
 
-    <!--상단 navbar -->
-    <div th:replace="~{nav.html::navbar}"></div>
+<!--상단 navbar -->
+<div th:replace="~{nav.html::navbar}"></div>
 
-    <!--폼에서 입력 받은 값을 post 방식으로 서버에 전달 -->
-    <form action="/product/addPrd" method="POST">
-        <input name="prodNm">
-        <input name="price">
-        <button type="submit">전송</button>
-    </form>
+<!-- 단일 행일 경우 get(0) 이나 [0] 으로 꺼내오지 않고 넘어온 변수 그대로 사용하면 됨 -->
+<div class="detail">
+    <h4>상세페이지</h4>
+    <img src="https://placehold.co/300">
+    <h4 th:text="${productDetail.prodNm}"></h4>
+    <p th:text="${productDetail.price}"><p>
+</div>
 
 </body>
 </html>

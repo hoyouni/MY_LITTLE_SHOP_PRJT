@@ -4,12 +4,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 상품 관련 Controller
@@ -153,6 +151,9 @@ public class ProductController {
          * 그리고 이렇게 개별로 받지 않고 폼에서 전송된 모든 데이터를 한 번에 담아서 받고 싶으면 Map 자료형 써서 받으면 됨
          * ex) String addPrd(@RequestParam HashMap<Object, Object> req) { System.out.println(req); }
          * 마지막으로 form 으로 전송하는 방식 말고 ajax 의 body 로 전송한 데이터는 @RequestBody 로 받아야 함.
+         * 참고로 @ModelAttribute Product product 이런식으로 파라미터 작성하면
+         * 알아서 product 엔티티 인스턴스를 만들어주고 네이밍이 같은 엔티티 내 속성에 집어 넣어주기는 하는데
+         * 어차피 여기서는 내가 받은 값을 가지고 조작할거라서 안 썼음
          */
 
         /**
@@ -185,6 +186,33 @@ public class ProductController {
 
         // 위에 if 문 못 타면 다시 입력 폼으로 돌아감
         return "redirect:/product/productAdd";
+    }
+
+    /**
+     * 상품 상세 페이지 호출
+     * @return productAdd page
+     */
+    @GetMapping("/{id}")
+    String productDetail(Model model, @PathVariable Long id) {
+
+        /**
+         *  findById() 함수?
+         *   >> JPA 에서 특정 row 찾아서 꺼내는데 쓰이는 함수
+         *  Optional?
+         *   >> 변수가 비어있을 수도 있고 설정된 제네릭 타입일 수도 있음 라는걸 명시해주고 get() 함수를 통해서 데이터 얻어옴
+         *      다만 Optional 인스턴스 생성 후에 바로 get 하는건 데이터가 null 일 가능성이 있기 때문에
+         *      생성한 인스턴스 변수에 isPresent() 함수를 호출해서 값이 비어있는지 체크한 뒤에 get() 함수를 쓰는게 일반적임
+         *      Optional 관련해서 자세한 내용은 찾아봐야겠다..
+         *  @PathVariable 어노테이션?
+         *   >> 요청자가 url 파라미터에 입력한 값을 가져올 수 있음
+         */
+        Optional<Product> result = prdRepo.findById(id);
+        if(result.isPresent()) {
+            model.addAttribute("productDetail", result.get());
+            return "product/productDetail.html";
+        }
+
+        return "redirect:/product/productList";
     }
 
 }

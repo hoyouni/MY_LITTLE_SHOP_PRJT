@@ -11,6 +11,9 @@
 </head>
 <body>
 
+<!--상단 navbar -->
+<div th:replace="~{nav.html::navbar}"></div>
+
 <!-- 복수 건을 출력하고 싶을 때는 해당 코드와 같이 thymeleaf 의 each 코드를 사용해서 뽑아내면 반복문 돌면서 출력함 -->
 <div class="card" th:each="prdList : ${products}">
     <img src="https://placehold.co/300">
@@ -25,10 +28,10 @@
     <div class="card">
         <img src="https://placehold.co/300">
         <div>
-            &lt;!&ndash; 참고로 ${products[0].prodCd} 로 사용해도 무방함 &ndash;&gt;
-            <h4 th:text="${products.get(0).prodCd}"></h4>
-            <h4 th:text="${products.get(0).prodNm}"></h4>
-            <p th:text="${products.get(0).price}"><p>
+            참고로 ${products[0].prodCd} 로 사용해도 무방함
+            <h4 th:text="${products.prodCd}"></h4>
+            <h4 th:text="${products.prodNm}"></h4>
+            <p th:text="${products.price}"><p>
         </div>
     </div>
 -->

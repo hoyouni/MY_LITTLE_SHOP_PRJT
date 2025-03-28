@@ -1,0 +1,16 @@
+<!--
+    상단 navbar
+    html 재사용이 필요한 경우
+    파일 따로 빼서 thymeleaf 문법 중 th:fragment : "네이밍"
+    으로 입력해두고 다른 필요한 html 에 가서
+    th:replace="~{파일경로 :: fragment 네이밍}"
+    입력해두면 재사용 가능함.
+    참고로 th:replace="~{파일경로 :: fragment 네이밍(데이터1, 데이터2)}" 이렇게 사용하면
+    데이터도 전송 가능함.
+-->
+<div class="nav" th:fragment="navbar">
+    <a class="logo">ShoppingMall Page</a>
+    <a href="/product/productList">상품목록</a>
+    <a href="/product/productAdd">상품추가</a>
+    <a href="/notice/noticeList">공지사항</a>
+</div>
