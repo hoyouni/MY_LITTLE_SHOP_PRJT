@@ -1,10 +1,13 @@
 package com.example.shop.product;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -81,7 +84,13 @@ import java.util.List;
 @RequestMapping("/product")
 public class ProductController {
 
-    // lombok에서 제공하는 @RequiredArgsConstructor 어노테이션에 의해 자동으로 ProductRepository DI 주입
+    /**
+     * lombok에서 제공하는 @RequiredArgsConstructor 어노테이션에 의해 자동으로 ProductRepository DI 주입
+     * 이 때 private final 을 지양하는 이유는
+     * 1. 한 번 초기화 된 repository 변수가 변경되지 않도록 하기 위함
+     * 2. 실행 중에 객체가 변하는 것을 막아 오류를 방지하기 위함
+     * 3. 필수적으로 사용하는 매개변수 없이는 인스턴스를 만들 수 없기에 반드시 객체의 주입이 필요한 경우에 강제하기 위함
+     */
     private final ProductRepository prdRepo;
 
     /* 만약 lombok 을 안 쓴다고 하면?
@@ -92,6 +101,11 @@ public class ProductController {
      이런 식으로 생성자에 인스턴스 할당해도 됨
     */
 
+    /**
+     * 상품 리스트 화면 호출
+     * @param model
+     * @return productList page
+     */
     @GetMapping("/productList")
     String productList(Model model) {
         /**
@@ -112,6 +126,65 @@ public class ProductController {
         */
 
         return "product/productList.html";
+    }
+
+    /**
+     * 상품 추가 화면 호출
+     * @return productAdd page
+     */
+    @GetMapping("/productAdd")
+    String productAdd() {
+        return "product/productAdd.html";
+    }
+
+    /**
+     * 상품 추가 기능
+     * @param prodNm 상품명
+     * @param price  가격
+     * @return  prodcutList page
+     */
+    @Transactional
+    @PostMapping("/addPrd")
+    String addPrd(@RequestParam String prodNm, @RequestParam String price) {
+
+        /**
+         * 폼에서 addPrd 호출 시 실행되는 함수인데 파라미터 넘길 때 인텔리제이 세팅에서
+         * java compiler > additional 어쩌고 입력란에 -parameters 어쩌고 등록해놨으면 파라미터에 @RequestParam 안 써도됨.
+         * 그리고 이렇게 개별로 받지 않고 폼에서 전송된 모든 데이터를 한 번에 담아서 받고 싶으면 Map 자료형 써서 받으면 됨
+         * ex) String addPrd(@RequestParam HashMap<Object, Object> req) { System.out.println(req); }
+         * 마지막으로 form 으로 전송하는 방식 말고 ajax 의 body 로 전송한 데이터는 @RequestBody 로 받아야 함.
+         */
+
+        /**
+         * 입력값 유효성 체크 후 DB 저장
+         */
+        if(!prodNm.isBlank() && !price.isBlank()) {
+
+            // 가격 숫자만 입력 되었는지 정규식 체크
+            final String REGEX = "[0-9]+";
+            if(price.matches(REGEX)) {
+                System.out.println("숫자만 있습니다.");
+
+                Product prd = new Product();
+                prd.setProdNm(prodNm);
+                // price 가 숫자만 있다고 체크 했으니 String to Integer 로 변환
+                prd.setPrice(Integer.parseInt(price));
+                prdRepo.save(prd);
+
+                prd = null;
+
+                return "redirect:/product/productList";
+
+            }
+            // 숫자 외 값이 입력된 경우
+            else {
+                System.out.println("숫자외에 값이 존재합니다.");
+                return "redirect:/product/productAdd";
+            }
+        }
+
+        // 위에 if 문 못 타면 다시 입력 폼으로 돌아감
+        return "redirect:/product/productAdd";
     }
 
 }

@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 경로를 / 부터 시작하면 static 폴더 하위 파일들 사용 가능-->
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+
+    <!--폼에서 입력 받은 값을 post 방식으로 서버에 전달 -->
+    <form action="/product/addPrd" method="POST">
+        <input name="prodNm">
+        <input name="price">
+        <button type="submit">전송</button>
+    </form>
+
+</body>
+</html>
