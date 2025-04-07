@@ -237,6 +237,58 @@ public class ProductController {
      * </예시>
      */
 
+    /**
+     * 상품 수정 페이지 이동
+     * @return
+     */
+    @GetMapping("/productEdit/{id}")
+    String productEdit(Model model, @PathVariable Long id) {
+
+        Optional<Product> result = prdRepo.findById(id);
+        if(result.isPresent()) {
+            model.addAttribute("data", result.get());
+            return "product/productEdit.html";
+        }
+        else {
+            return "redirect:/product/productList";
+        }
+    }
+
+
+    /**
+     * 상품 수정 기능
+     * @param prodCd 상품코드
+     * @param prodNm 상품명
+     * @param price  가격
+     * @return  prodcutList page
+     */
+    @Transactional
+    @PostMapping("/editPrd")
+    String editPrd(@RequestParam Long prodCd, @RequestParam String prodNm, @RequestParam String price) {
+
+        /**
+         * 입력값 유효성 체크 후 DB 저장
+         */
+        if(!prodNm.isBlank() && !price.isBlank()) {
+
+            // 가격 숫자만 입력 되었는지 정규식 체크
+            final String REGEX = "[0-9]+";
+            if(price.matches(REGEX)) {
+                System.out.println("숫자만 있습니다.");
+                // Service 클래스에 비즈니스 로직(아이템 저장) 위임
+                productService.editProduct(prodCd, prodNm, price);
+            }
+            // 숫자 외 값이 입력된 경우
+            else {
+                System.out.println("숫자외에 값이 존재합니다.");
+                return "redirect:/product/productList";
+            }
+        }
+
+        // 위에 if 문 못 타면 다시 입력 폼으로 돌아감
+        return "redirect:/product/productList";
+
+    }
 }
 
 

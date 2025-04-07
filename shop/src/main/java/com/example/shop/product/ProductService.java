@@ -28,4 +28,22 @@ public class ProductService {
         prd = null;
     }
 
+    /**
+     * 상품 수정 기능
+     * @param prodCd 상품코드
+     * @param prodNm 상품명
+     * @param price  가격
+     * @return  prodcutList page
+     */
+    public void editProduct(Long prodCd, String prodNm, String price){
+        Product prd = new Product();
+        prd.setProdCd(prodCd);
+        prd.setProdNm(prodNm);
+        // price 가 숫자만 있다고 체크 했으니 String to Integer 로 변환
+        prd.setPrice(Integer.parseInt(price));
+        prdRepo.save(prd);
+        // 자원 할당 후 해제 처리
+        prd = null;
+    }
+
 }
