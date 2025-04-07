@@ -20,6 +20,7 @@
     <div>
         <h4 th:text="${prdList.prodCd}"></h4>
         <h4 th:text="${prdList.prodNm}"></h4>
+        <a th:href="@{'/product/' + ${prdList.prodCd} }">링크</a>
         <p th:text="${prdList.price}"><p>
     </div>
 </div>
