@@ -215,6 +215,30 @@ public class ProductController {
         return "redirect:/product/productList";
     }
 
+    /**
+     * [참고]
+     * thymeleaf 안 쓰고 REST API 서버 예외 처리 시 해당 문법 사용 하면 편리
+     * @ExceptionHandler(Exception.class)
+     * public ResponseEntity<String> exceptionHandler() {
+     *   return ResponseEntity.status("예외코드").body("내용기입");
+     * }
+     * 이거 말고도 따로 예외 처리용 클래스 파일 생성해서
+     * @ControllerAdvice 붙이고 그 안에 @ExceptionHandler를 넣어주면
+     * 모든 컨트롤러에서 에러가 나는 경우 여기 있는 코드가 실행됨.
+     *
+     * <예시>
+     * @ControllerAdvice
+     * public class MyExceptionHandler {
+     *
+     *   @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+     *   public ResponseEntity<String> handler() {
+     *     return ResponseEntity.status(400).body("특정 에러시 발동");
+     *   }
+     *
+     * }
+     * </예시>
+     */
+
 }
 
 
