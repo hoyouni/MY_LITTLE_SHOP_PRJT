@@ -7,7 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -292,14 +294,34 @@ public class ProductController {
     }
 
     /**
-     * 상품 삭제 기능
+     * 상품 삭제 기능 1
+     * 쿼리 스트링으로 붙여서 호출할 때
+     * 근데 얘 너무 데이터 보안에 취약해 보임
      * @param prodCd 상품코드
      * @return
      */
-    @DeleteMapping("/deletePrd")
-    ResponseEntity<String> deletePrd(@RequestParam Long prodCd) {
+    @DeleteMapping("/deletePrdToQueryStr")
+    ResponseEntity<String> deletePrdToQueryStr(@RequestParam Long prodCd) {
         prdRepo.deleteById(prodCd);
         return ResponseEntity.status(200).body("DELETE");
+    }
+
+    /**
+     * 상품 삭제 기능2
+     * POST 요청으로 특정 이벤트 발생 시 ajax 요청할 때 처리
+     * @param body
+     * @return
+     */
+    @PostMapping("/deletePrdToAjax")
+    public ResponseEntity<Map<String, String>> deletePrdToAjax(@RequestBody Map<String, String> body) {
+        Long prodCd = Long.parseLong(body.get("prodCd"));
+
+        prdRepo.deleteById(prodCd);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("result", "success");
+
+        return ResponseEntity.ok(response); // 상태코드 200 + JSON 응답
     }
 }
 
