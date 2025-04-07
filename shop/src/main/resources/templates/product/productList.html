@@ -26,6 +26,15 @@
         <a th:href="@{'/product/productEdit/' + ${prdList.prodCd} }">
             <h4>✏️</h4>
         </a>
+        <span th:onclick="fetch('/product/deletePrd?prodCd=[[${prdList.prodCd}]]', { method : 'DELETE' } )
+          .then(r => r.text())
+          .then(result => {
+                if(result == 'DELETE') {
+                    location.reload();
+                }
+           })
+        ">🗑️
+        </span>
     </div>
 </div>
 

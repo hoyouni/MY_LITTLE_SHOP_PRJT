@@ -2,6 +2,7 @@ package com.example.shop.product;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -288,6 +289,17 @@ public class ProductController {
         // 위에 if 문 못 타면 다시 입력 폼으로 돌아감
         return "redirect:/product/productList";
 
+    }
+
+    /**
+     * 상품 삭제 기능
+     * @param prodCd 상품코드
+     * @return
+     */
+    @DeleteMapping("/deletePrd")
+    ResponseEntity<String> deletePrd(@RequestParam Long prodCd) {
+        prdRepo.deleteById(prodCd);
+        return ResponseEntity.status(200).body("DELETE");
     }
 }
 
