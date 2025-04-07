@@ -89,7 +89,12 @@ public class ProductController {
      * 2. 실행 중에 객체가 변하는 것을 막아 오류를 방지하기 위함
      * 3. 필수적으로 사용하는 매개변수 없이는 인스턴스를 만들 수 없기에 반드시 객체의 주입이 필요한 경우에 강제하기 위함
      */
-    private final ProductRepository prdRepo;
+    private final ProductRepository prdRepo;        // Product 엔티티 사용을 위한 인터페이스
+
+    /**
+     * 서비스클래스 DI 주입
+     */
+    private final ProductService productService;    // 비즈니스 로직 활용을 위한 Servie 클래스
 
     /* 만약 lombok 을 안 쓴다고 하면?
      @AutoWired
@@ -165,15 +170,8 @@ public class ProductController {
             final String REGEX = "[0-9]+";
             if(price.matches(REGEX)) {
                 System.out.println("숫자만 있습니다.");
-
-                Product prd = new Product();
-                prd.setProdNm(prodNm);
-                // price 가 숫자만 있다고 체크 했으니 String to Integer 로 변환
-                prd.setPrice(Integer.parseInt(price));
-                prdRepo.save(prd);
-
-                prd = null;
-
+                // Service 클래스에 비즈니스 로직(아이템 저장) 위임
+                productService.saveProduct(prodNm, price);
                 return "redirect:/product/productList";
 
             }
