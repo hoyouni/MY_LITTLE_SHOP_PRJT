@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 경로를 / 부터 시작하면 static 폴더 하위 파일들 사용 가능-->
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+
+<!--상단 navbar -->
+<div th:replace="~{nav.html::navbar}"></div>
+
+<h4>마이페이지</h4>
+<!--
+    유저 정보 확인
+    <span sec:authentication="principal"></span>
+-->
+<span sec:authentication="principal.authorities"></span>
+<span sec:authentication="principal.username"></span>
+<h4>님 반갑습니다.</h4>
+<div sec:authorize="isAuthenticated()">
+    <a href="/logout">로그아웃</a>
+</div>
+<!--
+    <span sec:authorize="hasAuthority('admin')">어드민만 보이는 페이지</span>
+    <div sec:authorize="isAuthenticated()">
+      로그인 된 인원만 보이는 페이지
+    </div>
+-->
+
+</body>
+</html>

@@ -36,6 +36,13 @@ public class SecurityConfig {
         http.authorizeHttpRequests((authorize) ->
                 authorize.requestMatchers("/**").permitAll()
         );
+        // 폼으로 로그인하겠다고 설정 > 로그인 성공 시 마이페이지로 이동
+        http.formLogin((formLogin) -> formLogin.loginPage("/login")
+                .defaultSuccessUrl("/myPage")
+                .failureUrl("/fail")
+        );
+        // 로그아웃
+        http.logout( logout -> logout.logoutUrl("/logout") );
         return http.build();
     }
 }

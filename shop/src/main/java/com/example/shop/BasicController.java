@@ -40,7 +40,7 @@ public class BasicController {
         return "index page !";
     }
 
-    @GetMapping("/myPage")
+    @GetMapping("/myPageTest")
     @ResponseBody
     String myPage() {
         return "my page !";

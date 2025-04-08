@@ -14,12 +14,16 @@
 <!--상단 navbar -->
 <div th:replace="~{nav.html::navbar}"></div>
 
-<form action="/regUser" method="POST">
-    <input name="userNm" placeholder="이름">
-    <input name="userId" placeholder="아이디">
+<div th:if="${param.error}">
+    <h4>아이디 혹은 비밀번호를 확인해주시기 바랍니다.</h4>
+</div>
+
+<form action="/login" method="POST">
+    <input name="username">
     <input name="password" type="password">
-    <button type="submit">회원가입</button>
+    <button type="submit">로그인</button>
 </form>
+
 
 </body>
 </html>
