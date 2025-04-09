@@ -66,5 +66,4 @@ public class UserController {
         // System.out.println(auth.getAuthorities().contains(new SimpleGrantedAuthority("admin"))); // 현재 유저 권한
         return "myPage.html";
     }
-
 }
