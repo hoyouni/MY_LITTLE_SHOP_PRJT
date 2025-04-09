@@ -101,6 +101,11 @@ public class ProductController {
      */
     private final ProductService productService;    // 비즈니스 로직 활용을 위한 Servie 클래스
 
+    /**
+     * 파일 업로드를 위한 aws s3 DI 주입
+     */
+    private final S3Service s3Service;
+
     /* 만약 lombok 을 안 쓴다고 하면?
      @AutoWired
      public ItemController(ProductRepository prdRepo) {
@@ -344,6 +349,22 @@ public class ProductController {
         // System.out.println(list.hasNext());          > 다음 페이지 존재 여부
         model.addAttribute("products", list);
         return "product/productList.html";
+    }
+
+    /**
+     * 파일 업로드 기능
+     * 1. 서버에 presigned url 발급 요청
+     * 2. 서버는 aws 에 presigned url 요청 받아 클라이언트에 응답
+     * 3. 클라이언트는 서버에서 응답받은 presigned url 을 통해 put 요청
+     * 4. aws s3 버킷에 파일 업로드
+     * @param filename
+     * @return
+     */
+    @GetMapping("/fileUpload")
+    @ResponseBody
+    String fileUpload(@RequestParam String filename){
+        var result = s3Service.createPresignedUrl("uploadFolder/" + filename);
+        return result;
     }
 }
 

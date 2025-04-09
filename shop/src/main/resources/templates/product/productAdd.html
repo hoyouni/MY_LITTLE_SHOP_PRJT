@@ -18,8 +18,41 @@
     <form action="/product/addPrd" method="POST">
         <input name="prodNm">
         <input name="price">
+        <input type="hidden" name="filePath" value="">
         <button type="submit">전송</button>
     </form>
 
+    <input type="file" onchange="fileUpload(this)">
+    <img src="" />
+
 </body>
+
+<script>
+    // 파일 업로드
+    async function fileUpload(e) {
+        let file = e.files[0];                                                  // 파일정보
+        let name = encodeURIComponent(file.name);                               // 파일명 인코딩
+        let preSignedUrl = await fetch('/product/fileUpload?filename=' + name); // api 호출 후 preSigned Url 응답
+        preSignedUrl = await preSignedUrl.text();                               // url 텍스트 가져옴
+
+        //console.log("preSignedUrl : " + preSignedUrl);
+
+        // AWS S3 서버에 파일 업로드 요청, 파라미터는 발급받은 url
+        let result = await fetch(preSignedUrl, {
+          method: 'PUT',
+          body: e.files[0]
+        });
+
+        // 업로드 후 결과로 가져온 url 정보 출력
+        //console.log(result);
+        //console.log(result.url.split("?")[0]);
+
+        // 업로드 성공 시 이미지 태그에 삽입 / DB 에 저장하기 위한 이미지 주소 값 바인딩
+        if (result.ok) {
+          document.querySelector('img').src = result.url.split("?")[0];
+          document.querySelector('input[name="filePath"]').value = result.url.split("?")[0];
+        }
+    }
+</script>
+
 </html>
