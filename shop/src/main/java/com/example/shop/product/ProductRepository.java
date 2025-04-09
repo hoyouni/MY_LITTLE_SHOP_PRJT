@@ -1,5 +1,7 @@
 package com.example.shop.product;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -9,5 +11,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * 인터페이스 생성 시 클래스도 자동으로 생성됨
  */
 public interface ProductRepository extends JpaRepository<Product, Long> {
-
+    Page<Product> findPageBy(Pageable page);
 }

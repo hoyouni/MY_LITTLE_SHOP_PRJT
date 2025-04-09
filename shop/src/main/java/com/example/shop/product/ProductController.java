@@ -2,6 +2,8 @@ package com.example.shop.product;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -322,6 +324,26 @@ public class ProductController {
         response.put("result", "success");
 
         return ResponseEntity.ok(response); // 상태코드 200 + JSON 응답
+    }
+
+
+    /**
+     * 상품 리스트 페이징 처리
+     * @param model
+     * @return 페이징 처리된 리스트 (페이지마다 5개씩 노출)
+     */
+    @GetMapping("/productList/page/{num}")
+    String productList(Model model, @PathVariable Integer num) {
+
+        /**
+         * JPA 에서 제공하는 페이지 함수 사용하면 페이징 처리 편리함
+         * 사용은 PageRequest.Of(현재 페이지, 현재 페이지에서 보여줄 리스트 수) 로 하면 됨
+         */
+        Page<Product> list = prdRepo.findPageBy(PageRequest.of(num - 1, 5));
+        // System.out.println(list.getTotalPages());    > 페이지 총 갯수 : 얘는 데이터 많으면 성능 저하 이슈 생길수도..
+        // System.out.println(list.hasNext());          > 다음 페이지 존재 여부
+        model.addAttribute("products", list);
+        return "product/productList.html";
     }
 }
 
