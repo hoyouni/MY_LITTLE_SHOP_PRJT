@@ -18,12 +18,27 @@
     <h4>아이디 혹은 비밀번호를 확인해주시기 바랍니다.</h4>
 </div>
 
-<form action="/login" method="POST">
-    <input name="username">
-    <input name="password" type="password">
-    <button type="submit">로그인</button>
-</form>
+<div style="display: flex; flex-direction: column; gap: 20px;">
+    <!-- 로그인 폼 -->
+    <form action="/login" method="POST" style="display: flex; flex-direction: column; gap: 10px;">
+        <input name="username" placeholder="아이디" style="width:200px;">
+        <input name="password" type="password" placeholder="비밀번호" style="width:200px;">
+
+        <!-- 로그인 버튼과 회원가입 버튼을 가로로 배치 -->
+        <div style="display: flex; gap: 10px;">
+            <button type="submit">로그인</button>
+            <button type="button" onclick="redirectRegisterPage()">회원가입</button>
+        </div>
+    </form>
+</div>
 
 
 </body>
+
+<script>
+    function redirectRegisterPage() {
+        window.location.href = "/register";
+    }
+</script>
+
 </html>

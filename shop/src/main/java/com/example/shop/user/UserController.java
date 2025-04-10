@@ -42,7 +42,7 @@ public class UserController {
     @PostMapping("/regUser")
     public String regUser(String userId, String password, String userNm) throws Exception {
         userService.regUser(userId, password, userNm);
-        return "redirect:/product/productList";
+        return "redirect:/myPage";
     }
 
     /**

@@ -10,7 +10,13 @@
 -->
 <div class="nav" th:fragment="navbar">
     <a class="logo">ShoppingMall Page</a>
-    <a href="/product/productList">상품목록</a>
-    <a href="/product/productAdd">상품추가</a>
-    <a href="/notice/noticeList">공지사항</a>
+    <div sec:authorize="isAuthenticated()">
+        <a href="/product/productList">상품목록</a>
+        <a href="/product/productAdd">상품추가</a>
+        <a href="/notice/noticeList">공지사항</a>
+        <a href="/myPage">마이페이지</a>
+    </div>
 </div>
+
+
+

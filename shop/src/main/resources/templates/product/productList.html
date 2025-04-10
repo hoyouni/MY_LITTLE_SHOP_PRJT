@@ -27,17 +27,17 @@
             <h4>✏️</h4>
         </a>
         <!-- 쿼리 스트링으로 ajax 처리할 때 -->
-        <span th:onclick="fetch('/product/deletePrdToQueryStr?prodCd=[[${prdList.prodCd}]]', { method : 'DELETE' } )
+        <span sec:authorize="hasAuthority('admin')" th:onclick="fetch('/product/deletePrdToQueryStr?prodCd=[[${prdList.prodCd}]]', { method : 'DELETE' } )
           .then(r => r.text())
           .then(result => {
                 if(result == 'DELETE') {
                     location.reload();
                 }
            })
-        ">🗑️1
+        ">🗑️(관리자용)
         </span>
         <!-- post 방식으로 ajax 호출할 때 -->
-        <button class="deleteBtn">🗑2</button>
+        <button class="deleteBtn">🗑</button>
     </div>
 </div>
 
@@ -59,28 +59,35 @@
     // post 요청으로 특정 이벤트 발생 시 ajax 요청할 때 처리
     document.querySelectorAll('.deleteBtn').forEach(function(button){
         button.addEventListener('click', function(){
-            const parentDiv = button.closest('div'); // 상위 div 찾기
-            const prodCd = parentDiv.querySelector('h4').textContent; // 첫 번째 h4가 prodCd
 
-            fetch('/product/deletePrdToAjax', {
-                method : 'POST',
-                headers : {
-                  "Content-Type": "application/json",
-                },
-                body : JSON.stringify({prodCd: prodCd.trim()})
-            })
-            .then(response => response.json())
-            .then(result => {
-                if (result.result === 'success') {
-                    alert('삭제 완료!');
-                    location.reload();
-                } else {
-                    alert('삭제 실패!');
-                }
-            })
-            .catch(error => {
-                console.error('에러 발생:', error);
-            });
+            if(confirm("정말 삭제하시겠습니까?")){
+
+                const parentDiv = button.closest('div'); // 상위 div 찾기
+                const prodCd = parentDiv.querySelector('h4').textContent; // 첫 번째 h4가 prodCd
+
+                fetch('/product/deletePrdToAjax', {
+                    method : 'POST',
+                    headers : {
+                      "Content-Type": "application/json",
+                    },
+                    body : JSON.stringify({prodCd: prodCd.trim()})
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.result === 'success') {
+                        alert('삭제 완료!');
+                        location.reload();
+                    } else {
+                        alert('삭제 실패!');
+                    }
+                })
+                .catch(error => {
+                    console.error('에러 발생:', error);
+                });
+            }
+            else {
+                return;
+            }
         });
     });
 </script>
