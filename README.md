@@ -8,6 +8,7 @@
  - Spring Boot 3
  - JPA (Hibernate)
 # FrontEnd
+ - JavaScript
  - REST API
  - Ajax
  - Thymeleaf
