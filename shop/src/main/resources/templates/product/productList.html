@@ -41,6 +41,16 @@
     </div>
 </div>
 
+<!-- 페이지 번호 링크 출력 -->
+<!-- 페이지 번호 컨테이너 -->
+<div class="pagination-container">
+    <a th:each="pageNum : ${pages}"
+       th:href="@{'/product/productList/page/' + ${pageNum + 1}}"
+       th:text="${pageNum + 1}">
+    </a>
+</div>
+
+
 <!-- 참고로 단일 건인 경우 이렇게 사용하고
     <div class="card">
         <img src="https://placehold.co/300">
@@ -91,4 +101,27 @@
         });
     });
 </script>
+
+<!-- 페이징 스타일 -->
+<style>
+    .pagination-container {
+        display: flex;
+        justify-content: center; /* 중앙 정렬 */
+        gap: 10px; /* 페이지 번호 사이 간격 */
+        margin-top: 30px;
+    }
+
+    .pagination-container a {
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        text-decoration: none;
+        color: black;
+    }
+
+    .pagination-container a:hover {
+        background-color: #f0f0f0;
+    }
+</style>
+
 </html>

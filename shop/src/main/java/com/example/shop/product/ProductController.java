@@ -10,10 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * 상품 관련 Controller
@@ -129,8 +126,22 @@ public class ProductController {
          * html 페이지로 응답 해주면 됨
          */
 
+        // 페이지에 노출될 데이터 리스트
+        /*
         List<Product> list = prdRepo.findAll();
         model.addAttribute("products", list);
+
+        // 페이지 총 갯수 출력
+        Page<Product> pageTotalCnt = prdRepo.findPageBy(PageRequest.of(1, 5));
+        int cnt = pageTotalCnt.getTotalPages();
+
+        List<Integer> pages = new ArrayList<>();
+        for(int i = 0; i < cnt; i++) {
+            pages.add(i);
+        }
+
+        model.addAttribute("pages", pages);
+        */
 
         /*
          *  데이터 출력 해보고 싶을 때는 System.out.println(list.get(0).prodNm); 입력해서 확인해보기
@@ -139,7 +150,8 @@ public class ProductController {
          *  System.out.println(new Product().toString());
         */
 
-        return "product/productList.html";
+        // 첫번째 페이지로 바로 리다이렉트
+        return "redirect:/product/productList/page/1";
     }
 
     /**
@@ -346,9 +358,18 @@ public class ProductController {
          * 사용은 PageRequest.Of(현재 페이지, 현재 페이지에서 보여줄 리스트 수) 로 하면 됨
          */
         Page<Product> list = prdRepo.findPageBy(PageRequest.of(num - 1, 5));
-        // System.out.println(list.getTotalPages());    > 페이지 총 갯수 : 얘는 데이터 많으면 성능 저하 이슈 생길수도..
+
+        // 총 페이지 갯수 리턴을 위한 처리
+        int cnt = list.getTotalPages();
+
+        List<Integer> pages = new ArrayList<>();
+        for(int i = 0; i < cnt; i++) {
+            pages.add(i);
+        }
+
         // System.out.println(list.hasNext());          > 다음 페이지 존재 여부
-        model.addAttribute("products", list);
+        model.addAttribute("products", list);   // 페이지 리스트
+        model.addAttribute("pages", pages);     // 총 페이지 갯수 리스트
         return "product/productList.html";
     }
 
