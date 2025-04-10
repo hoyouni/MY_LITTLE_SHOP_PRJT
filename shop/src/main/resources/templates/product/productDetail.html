@@ -22,5 +22,12 @@
     <p th:text="${productDetail.price}"><p>
 </div>
 
+<form action="/product/saveComment" method="POST">
+    <input name="content">
+    <input type="hidden" name="userId">
+    <input type="hidden" name="parentId" th:value="${productDetail.prodCd}">
+    <button>댓글작성</button>
+</form>
+
 </body>
 </html>

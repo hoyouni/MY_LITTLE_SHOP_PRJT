@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -365,6 +366,31 @@ public class ProductController {
     String fileUpload(@RequestParam String filename){
         var result = s3Service.createPresignedUrl("uploadFolder/" + filename);
         return result;
+    }
+
+    /**
+     * 댓글 작성 기능
+     * @param content   댓글내용
+     * @param parentId  상품코드
+     * @param auth      로그인 사용자 정보
+     * @return
+     */
+    @Transactional
+    @PostMapping("/saveComment")
+    String saveComment(@RequestParam String content, @RequestParam Long parentId, Authentication auth) {
+
+        // 로그인 회원 아이디 가져옴
+        String userId = auth.getName();
+
+        // 로그인 하지 않은 사용자의 경우 임의처리
+        if(userId.isBlank()) {
+            userId = "undefinedUser";
+        }
+
+        productService.saveComment(content, parentId, userId);
+
+        // 위에 if 문 못 타면 다시 입력 폼으로 돌아감
+        return "redirect:/product/productList";
     }
 }
 

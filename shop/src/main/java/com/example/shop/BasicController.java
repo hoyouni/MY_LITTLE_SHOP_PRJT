@@ -1,5 +1,6 @@
 package com.example.shop;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,9 +30,13 @@ import java.time.ZonedDateTime;
 public class BasicController {
 
     @GetMapping("/")
-    @ResponseBody
-    String mainPage() {
-        return "main page !";
+    String mainPage(Authentication auth) {
+        // auth 객체가 null 이 아니고 이미 로그인한 사용자라면 마이페이지 보여주고
+        if(auth != null && auth.isAuthenticated())
+            return "redirect:/myPage";
+        // 그렇지 않은 사용자의 경우 로그인 페이지 리다이렉트
+        else
+            return "redirect:/login";
     }
 
     @GetMapping("/index")
