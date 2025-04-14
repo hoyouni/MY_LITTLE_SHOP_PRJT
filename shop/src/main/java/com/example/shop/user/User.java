@@ -33,6 +33,7 @@ public class User {
      * mappedBy 뒤에는 내 컬럼을 훔쳐쓰고있는 다른 컬럼명 기입하면 됨
      * 이렇게 하면 유저정보 조회 시 해당 유저가 주문한 정보도 같이 출력됨
      */
+    @ToString.Exclude
     @OneToMany(mappedBy = "user")
     List<Sales> sales = new ArrayList<>();
 }
