@@ -84,7 +84,11 @@ public class UserService implements UserDetailsService {
              * 이 때 권한 같은 경우에는 회원가입 시 DB 에서 권한을 저장해두는데
              * 크로스 체크 겸 DB 에 저장된 회원의 등급별로 권한 리스트에도 같이 저장해둠
              */
-            return new org.springframework.security.core.userdetails.User(userInfo.getUserId(), userInfo.getPassword(), userGradeList);
+
+            CustomUser customUser = new CustomUser(userInfo.getUserId(), userInfo.getPassword(), userGradeList);
+            customUser.userRealId = userInfo.getId();
+
+            return customUser;
         }
         return null;
     }
