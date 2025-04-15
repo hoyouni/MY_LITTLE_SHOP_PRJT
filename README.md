@@ -18,5 +18,5 @@
  - 데이터베이스 호스팅 : Azure Database for MySQL
 
 
-Click to [My Little Shop Prjt](http://MyLittleShop-env.eba-ftptfurq.ap-northeast-2.elasticbeanstalk.com )   
+Click to [My Little Shop Project](http://MyLittleShop-env.eba-ftptfurq.ap-northeast-2.elasticbeanstalk.com )   
 
